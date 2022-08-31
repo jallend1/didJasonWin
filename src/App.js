@@ -10,6 +10,15 @@ function App() {
     return currentMonth;
   };
 
+  const translateChessCode = (chessCode) => {
+    if (chessCode === "win") setTheAnswer("Yes.");
+    else if (chessCode === "agree" || chessCode === "stalemate") {
+      setTheAnswer("It was a tie :(");
+    } else {
+      setTheAnswer("No!");
+    }
+  };
+
   const retrieveLatestGame = () => {
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
@@ -19,13 +28,15 @@ function App() {
     )
       .then((res) => res.json())
       .then(({ games }) => {
+        console.log(games);
         const mostRecentGame = games[games.length - 1];
-        console.log(mostRecentGame.url);
+        let chessCode;
         if (mostRecentGame.black.username === "jallend1") {
-          console.log(mostRecentGame.black.result);
+          chessCode = mostRecentGame.black.result;
         } else {
-          console.log(mostRecentGame.white.result);
+          chessCode = mostRecentGame.white.result;
         }
+        translateChessCode(chessCode);
       });
   };
 
@@ -48,6 +59,7 @@ function App() {
 
   return (
     <div className="App">
+      <h2>Did Jason beat Papa today?</h2>
       <h1>{theAnswer}</h1>
     </div>
   );
