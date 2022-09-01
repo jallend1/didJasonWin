@@ -1,22 +1,23 @@
-import { useState, useEffect } from 'react';
-import Celebration from './images/celebration.jpg';
+import { useState, useEffect } from "react";
+import Celebration from "./images/celebration.jpg";
+import VictoryVideo from "./images/win.mp4";
 
 function App() {
-  const [theAnswer, setTheAnswer] = useState('...Loading');
+  const [theAnswer, setTheAnswer] = useState("...Loading");
 
   const formatCurrentMonth = (currentDate) => {
     let currentMonth = currentDate.getMonth() + 1;
     // API requires double digit month
-    if (currentMonth < 10) currentMonth = '0' + currentMonth;
+    if (currentMonth < 10) currentMonth = "0" + currentMonth;
     return currentMonth;
   };
 
   const translateChessCode = (chessCode) => {
-    if (chessCode === 'win') setTheAnswer('🎉 Yes. 🎉');
-    else if (chessCode === 'agree' || chessCode === 'stalemate') {
-      setTheAnswer('It was a tie :(');
+    if (chessCode === "win") setTheAnswer("🎉 Yes. 🎉");
+    else if (chessCode === "agree" || chessCode === "stalemate") {
+      setTheAnswer("It was a tie :(");
     } else {
-      setTheAnswer('No!');
+      setTheAnswer("No!");
     }
   };
 
@@ -32,7 +33,7 @@ function App() {
         console.log(games);
         const mostRecentGame = games[games.length - 1];
         let chessCode;
-        if (mostRecentGame.black.username === 'jallend1') {
+        if (mostRecentGame.black.username === "jallend1") {
           chessCode = mostRecentGame.black.result;
         } else {
           chessCode = mostRecentGame.white.result;
@@ -43,13 +44,13 @@ function App() {
 
   const fetchChess = () => {
     // Checks for active games
-    fetch('https://api.chess.com/pub/player/jallend1/games')
+    fetch("https://api.chess.com/pub/player/jallend1/games")
       .then((res) => res.json())
       .then(({ games }) => {
         console.log(games);
         // Temporarily check to see if games equal to 0 for debugging
         if (games.length === 1) {
-          setTheAnswer('Not Yet.');
+          setTheAnswer("Not Yet.");
         } else {
           retrieveLatestGame();
         }
@@ -62,9 +63,12 @@ function App() {
     <div
       className="App"
       style={{
-        backgroundImage: `linear-gradient(rgba(26, 26, 26, 0.8), rgba(117, 19, 93, 0.73)), url(${Celebration})`
+        backgroundImage: `linear-gradient(rgba(26, 26, 26, 0.8), rgba(117, 19, 93, 0.73))`,
       }}
     >
+      <video autoPlay muted loop>
+        <source src={VictoryVideo} type="video/mp4" />
+      </video>
       <h2>Did Jason beat Papa today?</h2>
       <h1>{theAnswer}</h1>
     </div>
