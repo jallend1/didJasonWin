@@ -23,13 +23,7 @@ function App() {
       } else {
         setTheAnswer('No!');
       }
-    }, '2000');
-  };
-
-  const loadCorrectVideo = () => {
-    if (theAnswer === 'Loading...') return LoadingVideo;
-    else if (theAnswer === '🎉 Yes. 🎉') return VictoryVideo;
-    else if (theAnswer === 'No.') return DefeatVideo;
+    }, '4000');
   };
 
   const retrieveLatestGame = () => {
@@ -72,15 +66,22 @@ function App() {
 
   return (
     <div className="App">
-      <video autoPlay muted loop>
-        {theAnswer === '🎉 Yes. 🎉' && (
+      {theAnswer === '🎉 Yes. 🎉' && (
+        <video autoPlay muted loop>
           <source src={VictoryVideo} type="video/mp4" />
-        )}
-        {theAnswer === 'No.' && <source src={DefeatVideo} type="video/mp4" />}
-        {theAnswer === 'Loading...' && (
+        </video>
+      )}
+      {theAnswer === 'No.' && (
+        <video autoPlay muted loop>
+          <source src={DefeatVideo} type="video/mp4" />
+        </video>
+      )}
+      {theAnswer === 'Loading...' && (
+        <video autoPlay muted loop>
           <source src={LoadingVideo} type="video/mp4" />
-        )}
-      </video>
+        </video>
+      )}
+
       <div className="results">
         <h2>Did Jason beat Papa today?</h2>
         <h1>{theAnswer}</h1>
