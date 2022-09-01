@@ -5,7 +5,7 @@ import DefeatVideo from './images/defeat.mp4';
 import LoadingVideo from './images/loading.mp4';
 
 function App() {
-  const [theAnswer, setTheAnswer] = useState('...Loading');
+  const [theAnswer, setTheAnswer] = useState('Loading...');
 
   const formatCurrentMonth = (currentDate) => {
     let currentMonth = currentDate.getMonth() + 1;
@@ -15,12 +15,15 @@ function App() {
   };
 
   const translateChessCode = (chessCode) => {
-    if (chessCode === 'win') setTheAnswer('🎉 Yes. 🎉');
-    else if (chessCode === 'agree' || chessCode === 'stalemate') {
-      setTheAnswer('It was a tie :(');
-    } else {
-      setTheAnswer('No!');
-    }
+    setTheAnswer('Loading...');
+    setTimeout(() => {
+      if (chessCode === 'win') setTheAnswer('🎉 Yes. 🎉');
+      else if (chessCode === 'agree' || chessCode === 'stalemate') {
+        setTheAnswer('It was a tie :(');
+      } else {
+        setTheAnswer('No!');
+      }
+    }, '2000');
   };
 
   const loadCorrectVideo = () => {
@@ -64,8 +67,6 @@ function App() {
         }
       });
   };
-
-  const determineCorrectVideo = () => {};
 
   useEffect(fetchChess, []);
 
