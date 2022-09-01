@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 // import Celebration from "./images/celebration.jpg";
 import VictoryVideo from './images/win.mp4';
-// import DefeatVideo from './images/defeat.mp4';
-// import LoadingVideo from './images/loading.mp4';
+import DefeatVideo from './images/defeat.mp4';
+import LoadingVideo from './images/loading.mp4';
 
 function App() {
   const [theAnswer, setTheAnswer] = useState('...Loading');
