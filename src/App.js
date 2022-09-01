@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Celebration from "./images/celebration.jpg";
+// import Celebration from "./images/celebration.jpg";
 import VictoryVideo from "./images/win.mp4";
 
 function App() {
@@ -67,7 +67,9 @@ function App() {
       }}
     >
       <video autoPlay muted loop>
-        <source src={VictoryVideo} type="video/mp4" />
+        {theAnswer === "🎉 Yes. 🎉" ? (
+          <source src={VictoryVideo} type="video/mp4" />
+        ) : null}
       </video>
       <h2>Did Jason beat Papa today?</h2>
       <h1>{theAnswer}</h1>
