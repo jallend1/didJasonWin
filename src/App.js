@@ -3,9 +3,11 @@ import { useState, useEffect } from 'react';
 import VictoryVideo from './images/win.mp4';
 import DefeatVideo from './images/defeat.mp4';
 import LoadingVideo from './images/loading.mp4';
+import NotYetVideo from './images/notyet.mp4';
 
 function App() {
   const [theAnswer, setTheAnswer] = useState('Loading...');
+  const [latestGame, setLatestGame] = useState(null);
 
   const formatCurrentMonth = (currentDate) => {
     let currentMonth = currentDate.getMonth() + 1;
@@ -15,7 +17,6 @@ function App() {
   };
 
   const translateChessCode = (chessCode) => {
-    setTheAnswer('Loading...');
     setTimeout(() => {
       if (chessCode === 'win') setTheAnswer('🎉 Yes. 🎉');
       else if (chessCode === 'agree' || chessCode === 'stalemate') {
@@ -37,6 +38,7 @@ function App() {
       .then(({ games }) => {
         console.log(games);
         const mostRecentGame = games[games.length - 1];
+        setLatestGame(mostRecentGame);
         let chessCode;
         if (mostRecentGame.black.username === 'jallend1') {
           chessCode = mostRecentGame.black.result;
@@ -81,10 +83,20 @@ function App() {
           <source src={LoadingVideo} type="video/mp4" />
         </video>
       )}
+      {theAnswer === 'Not yet.' && (
+        <video autoPlay muted loop>
+          <source src={NotYetVideo} type="video/mp4" />
+        </video>
+      )}
 
       <div className="results">
         <h2>Did Jason beat Papa today?</h2>
         <h1>{theAnswer}</h1>
+        {latestGame && theAnswer !== 'Loading...' ? (
+          <div>
+            <a href={latestGame.url}>Link</a>
+          </div>
+        ) : null}
       </div>
     </div>
   );
