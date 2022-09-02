@@ -38,6 +38,8 @@ function App() {
       .then(({ games }) => {
         console.log(games);
         const mostRecentGame = games[games.length - 1];
+        // TODO - Make sure the date on this matches the current date;
+        // If not, return yesterday's results e.g. No, but he did yesterday, etc...
         setLatestGame(mostRecentGame);
         let chessCode;
         if (mostRecentGame.black.username === 'jallend1') {
@@ -62,6 +64,10 @@ function App() {
           retrieveLatestGame();
         }
       });
+  };
+
+  const convertUnixTime = (chessTime) => {
+    return new Date(chessTime * 1000).toString();
   };
 
   useEffect(fetchChess, []);
@@ -92,11 +98,11 @@ function App() {
       <div className="results">
         <h2>Did Jason beat Papa today?</h2>
         <h1>{theAnswer}</h1>
-        {latestGame && theAnswer !== 'Loading...' ? (
+        {/* {latestGame && theAnswer !== 'Loading...' ? (
           <div>
             <a href={latestGame.url}>Link</a>
           </div>
-        ) : null}
+        ) : null} */}
       </div>
     </div>
   );
