@@ -7,7 +7,7 @@ import NotYetVideo from './images/notyet.mp4';
 
 function App() {
   const [theAnswer, setTheAnswer] = useState('Loading...');
-  const [latestGame, setLatestGame] = useState(null);
+  // const [latestGame, setLatestGame] = useState(null);
 
   const formatCurrentMonth = (currentDate) => {
     let currentMonth = currentDate.getMonth() + 1;
@@ -26,8 +26,8 @@ function App() {
     }, '4000');
   };
 
-  const getFetchURL = (archive = false) => {
-    if (archive) {
+  const getFetchURL = (isRetrievingArchive = false) => {
+    if (isRetrievingArchive) {
       const [currentYear, currentMonth] = getDateInfo();
       return `https://api.chess.com/pub/player/jallend1/games/${currentYear}/${currentMonth}`;
     } else {
@@ -50,7 +50,7 @@ function App() {
         const mostRecentGame = games[games.length - 1];
         // TODO - Make sure the date on this matches the current date;
         // If not, return yesterday's results e.g. No, but he did yesterday, etc...
-        setLatestGame(mostRecentGame);
+        // setLatestGame(mostRecentGame);
         let chessCode;
         if (mostRecentGame.black.username === 'jallend1') {
           chessCode = mostRecentGame.black.result;
@@ -77,7 +77,7 @@ function App() {
         console.log(games);
         // Temporarily check to see if games equal to 0 for debugging
         if (games.length === 1) {
-          // If not Papa, check for game with today's date in archives
+          // If the game is against Papa, not yet
           if (checkPapaOpponent(games[0])) setTheAnswer('Not Yet.');
         } else {
           retrieveLatestGame();
@@ -85,9 +85,9 @@ function App() {
       });
   };
 
-  const convertUnixTime = (chessTime) => {
-    return new Date(chessTime * 1000).toString();
-  };
+  // const convertUnixTime = (chessTime) => {
+  //   return new Date(chessTime * 1000).toString();
+  // };
 
   useEffect(fetchChess, []);
 
