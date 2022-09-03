@@ -89,7 +89,7 @@ function App() {
           <source src={LoadingVideo} type="video/mp4" />
         </video>
       )}
-      {theAnswer === 'Not yet.' && (
+      {theAnswer === 'Not Yet.' && (
         <video autoPlay muted loop>
           <source src={NotYetVideo} type="video/mp4" />
         </video>
