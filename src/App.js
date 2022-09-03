@@ -6,7 +6,7 @@ import LoadingVideo from './images/loading.mp4';
 import NotYetVideo from './images/notyet.mp4';
 
 function App() {
-  const [theAnswer, setTheAnswer] = useState('Loading...');
+  const [theAnswer, setTheAnswer] = useState('Researching the topic...');
   // const [latestGame, setLatestGame] = useState(null);
 
   const formatCurrentMonth = (currentDate) => {
@@ -158,7 +158,7 @@ function App() {
           <source src={DefeatVideo} type="video/mp4" />
         </video>
       )}
-      {theAnswer === 'Loading...' && (
+      {theAnswer === 'Researching the topic...' && (
         <video autoPlay muted loop>
           <source src={LoadingVideo} type="video/mp4" />
         </video>
