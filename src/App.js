@@ -26,40 +26,40 @@ function App() {
     }, '4000');
   };
 
-  const getFetchURL = (isRetrievingArchive = false) => {
-    if (isRetrievingArchive) {
-      const [currentYear, currentMonth] = getDateInfo();
-      return `https://api.chess.com/pub/player/jallend1/games/${currentYear}/${currentMonth}`;
-    } else {
-      return 'https://api.chess.com/pub/player/jallend1/games';
-    }
-  };
+  // const getFetchURL = (isRetrievingArchive = false) => {
+  //   if (isRetrievingArchive) {
+  //     const [currentYear, currentMonth] = getDateInfo();
+  //     return `https://api.chess.com/pub/player/jallend1/games/${currentYear}/${currentMonth}`;
+  //   } else {
+  //     return 'https://api.chess.com/pub/player/jallend1/games';
+  //   }
+  // };
 
-  const getDateInfo = () => {
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const currentMonth = formatCurrentMonth(currentDate);
-    return [currentYear, currentMonth];
-  };
+  // const getDateInfo = () => {
+  //   const currentDate = new Date();
+  //   const currentYear = currentDate.getFullYear();
+  //   const currentMonth = formatCurrentMonth(currentDate);
+  //   return [currentYear, currentMonth];
+  // };
 
-  const retrieveLatestGame = () => {
-    fetch(getFetchURL(true))
-      .then((res) => res.json())
-      .then(({ games }) => {
-        console.log(games);
-        const mostRecentGame = games[games.length - 1];
-        // TODO - Make sure the date on this matches the current date;
-        // If not, return yesterday's results e.g. No, but he did yesterday, etc...
-        // setLatestGame(mostRecentGame);
-        let chessCode;
-        if (mostRecentGame.black.username === 'jallend1') {
-          chessCode = mostRecentGame.black.result;
-        } else {
-          chessCode = mostRecentGame.white.result;
-        }
-        translateChessCode(chessCode);
-      });
-  };
+  // const retrieveLatestGame = () => {
+  //   fetch(getFetchURL(true))
+  //     .then((res) => res.json())
+  //     .then(({ games }) => {
+  //       console.log(games);
+  //       const mostRecentGame = games[games.length - 1];
+  //       // TODO - Make sure the date on this matches the current date;
+  //       // If not, return yesterday's results e.g. No, but he did yesterday, etc...
+  //       // setLatestGame(mostRecentGame);
+  //       let chessCode;
+  //       if (mostRecentGame.black.username === 'jallend1') {
+  //         chessCode = mostRecentGame.black.result;
+  //       } else {
+  //         chessCode = mostRecentGame.white.result;
+  //       }
+  //       translateChessCode(chessCode);
+  //     });
+  // };
 
   const checkPapaOpponent = (game) => {
     // Verifies that one of the active games DOES indeed involve Papa
@@ -69,27 +69,82 @@ function App() {
       : false;
   };
 
-  const fetchChess = () => {
-    // Checks for active games
-    fetch(getFetchURL())
-      .then((res) => res.json())
-      .then(({ games }) => {
-        console.log(games);
-        // Temporarily check to see if games equal to 0 for debugging
-        if (games.length === 1) {
-          // If the game is against Papa, not yet
-          if (checkPapaOpponent(games[0])) setTheAnswer('Not Yet.');
-        } else {
-          retrieveLatestGame();
-        }
-      });
-  };
+  // const fetchChess = () => {
+  //   // Checks for active games
+  //   fetch(getFetchURL())
+  //     .then((res) => res.json())
+  //     .then(({ games }) => {
+  //       console.log(games);
+  //       // Temporarily check to see if games equal to 0 for debugging
+  //       if (games.length === 1) {
+  //         // If the game is against Papa, not yet
+  //         if (checkPapaOpponent(games[0])) setTheAnswer('Not Yet.');
+  //       } else {
+  //         retrieveLatestGame();
+  //       }
+  //     });
+  // };
 
   // const convertUnixTime = (chessTime) => {
   //   return new Date(chessTime * 1000).toString();
   // };
 
-  useEffect(fetchChess, []);
+  // useEffect(fetchChess, []);
+
+  useEffect(() => {
+    const getFetchURL = (isRetrievingArchive = false) => {
+      if (isRetrievingArchive) {
+        const [currentYear, currentMonth] = getDateInfo();
+        return `https://api.chess.com/pub/player/jallend1/games/${currentYear}/${currentMonth}`;
+      } else {
+        return 'https://api.chess.com/pub/player/jallend1/games';
+      }
+    };
+
+    const getDateInfo = () => {
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+      const currentMonth = formatCurrentMonth(currentDate);
+      return [currentYear, currentMonth];
+    };
+
+    const fetchChess = () => {
+      // Checks for active games
+      fetch(getFetchURL())
+        .then((res) => res.json())
+        .then(({ games }) => {
+          console.log(games);
+          // Temporarily check to see if games equal to 0 for debugging
+          if (games.length === 1) {
+            // If the game is against Papa, not yet
+            if (checkPapaOpponent(games[0])) setTheAnswer('Not Yet.');
+          } else {
+            retrieveLatestGame();
+          }
+        });
+    };
+
+    const retrieveLatestGame = () => {
+      fetch(getFetchURL(true))
+        .then((res) => res.json())
+        .then(({ games }) => {
+          console.log(games);
+          const mostRecentGame = games[games.length - 1];
+          // TODO - Make sure the date on this matches the current date;
+          // If not, return yesterday's results e.g. No, but he did yesterday, etc...
+          // setLatestGame(mostRecentGame);
+          let chessCode;
+          if (mostRecentGame.black.username === 'jallend1') {
+            chessCode = mostRecentGame.black.result;
+          } else {
+            chessCode = mostRecentGame.white.result;
+          }
+          translateChessCode(chessCode);
+        });
+    };
+
+    fetchChess();
+  }, []);
 
   return (
     <div className="App">
