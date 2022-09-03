@@ -27,9 +27,13 @@ function App() {
     }, '4000');
   };
 
-  const getFetchURL = () => {
-    const [currentYear, currentMonth] = getDateInfo();
-    return `https://api.chess.com/pub/player/jallend1/games/${currentYear}/${currentMonth}`;
+  const getFetchURL = (archive = false) => {
+    if (archive) {
+      const [currentYear, currentMonth] = getDateInfo();
+      return `https://api.chess.com/pub/player/jallend1/games/${currentYear}/${currentMonth}`;
+    } else {
+      return 'https://api.chess.com/pub/player/jallend1/games';
+    }
   };
 
   const getDateInfo = () => {
@@ -60,7 +64,7 @@ function App() {
 
   const fetchChess = () => {
     // Checks for active games
-    fetch('https://api.chess.com/pub/player/jallend1/games')
+    fetch(getFetchURL())
       .then((res) => res.json())
       .then(({ games }) => {
         console.log(games);
@@ -105,11 +109,6 @@ function App() {
       <div className="results">
         <h2>Did Jason beat Papa today?</h2>
         <h1>{theAnswer}</h1>
-        {/* {latestGame && theAnswer !== 'Loading...' ? (
-          <div>
-            <a href={latestGame.url}>Link</a>
-          </div>
-        ) : null} */}
       </div>
     </div>
   );
