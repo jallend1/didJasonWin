@@ -11,7 +11,6 @@ function App() {
 
   const formatCurrentMonth = (currentDate) => {
     let currentMonth = currentDate.getMonth() + 1;
-    // API requires double digit month
     if (currentMonth < 10) currentMonth = '0' + currentMonth;
     return currentMonth;
   };
@@ -44,7 +43,7 @@ function App() {
   };
 
   const retrieveLatestGame = () => {
-    fetch(getFetchURL())
+    fetch(getFetchURL(true))
       .then((res) => res.json())
       .then(({ games }) => {
         console.log(games);
@@ -62,6 +61,14 @@ function App() {
       });
   };
 
+  const checkPapaOpponent = (game) => {
+    // Verifies that one of the active games DOES indeed involve Papa
+    return game.black === 'https://api.chess.com/pub/player/dchessmeister1' ||
+      game.white === 'https://api.chess.com/pub/player/dchessmeister1'
+      ? true
+      : false;
+  };
+
   const fetchChess = () => {
     // Checks for active games
     fetch(getFetchURL())
@@ -70,7 +77,8 @@ function App() {
         console.log(games);
         // Temporarily check to see if games equal to 0 for debugging
         if (games.length === 1) {
-          setTheAnswer('Not Yet.');
+          // If not Papa, check for game with today's date in archives
+          if (checkPapaOpponent(games[0])) setTheAnswer('Not Yet.');
         } else {
           retrieveLatestGame();
         }
@@ -90,7 +98,7 @@ function App() {
           <source src={VictoryVideo} type="video/mp4" />
         </video>
       )}
-      {theAnswer === 'No.' && (
+      {theAnswer === 'No!' && (
         <video autoPlay muted loop>
           <source src={DefeatVideo} type="video/mp4" />
         </video>
