@@ -27,13 +27,20 @@ function App() {
     }, '4000');
   };
 
-  const retrieveLatestGame = () => {
+  const getFetchURL = () => {
+    const [currentYear, currentMonth] = getDateInfo();
+    return `https://api.chess.com/pub/player/jallend1/games/${currentYear}/${currentMonth}`;
+  };
+
+  const getDateInfo = () => {
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
     const currentMonth = formatCurrentMonth(currentDate);
-    fetch(
-      `https://api.chess.com/pub/player/jallend1/games/${currentYear}/${currentMonth}`
-    )
+    return [currentYear, currentMonth];
+  };
+
+  const retrieveLatestGame = () => {
+    fetch(getFetchURL())
       .then((res) => res.json())
       .then(({ games }) => {
         console.log(games);
