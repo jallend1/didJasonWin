@@ -5,8 +5,8 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">Hello there</header>
-      <BackgroundVideo />
-      <Results theResults="placeholder" />
+      <BackgroundVideo theResults="🎉 Yes. 🎉" />
+      <Results theResults="🎉 Yes. 🎉" />
     </div>
   );
 }

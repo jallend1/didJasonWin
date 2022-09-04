@@ -3,25 +3,25 @@ import DefeatVideo from '../images/defeat.mp4';
 import LoadingVideo from '../images/loading.mp4';
 import NotYetVideo from '../images/notyet.mp4';
 
-const BackgroundVideo = ({ theResult = '🎉 Yes. 🎉' }) => {
+const BackgroundVideo = ({ theResults }) => {
   return (
     <div className="background-video">
-      {theResult === '🎉 Yes. 🎉' && (
+      {theResults === '🎉 Yes. 🎉' && (
         <video autoPlay muted loop>
           <source src={VictoryVideo} type="video/mp4" />
         </video>
       )}
-      {theResult === 'No!' && (
+      {theResults === 'No!' && (
         <video autoPlay muted loop>
           <source src={DefeatVideo} type="video/mp4" />
         </video>
       )}
-      {theResult === 'Researching the topic...' && (
+      {theResults === 'Researching the topic...' && (
         <video autoPlay muted loop>
           <source src={LoadingVideo} type="video/mp4" />
         </video>
       )}
-      {theResult === 'Not Yet.' && (
+      {theResults === 'Not Yet.' && (
         <video autoPlay muted loop>
           <source src={NotYetVideo} type="video/mp4" />
         </video>
