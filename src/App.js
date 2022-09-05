@@ -32,15 +32,13 @@ function App() {
           'https://api.chess.com/pub/player/dchessmeister1'
       ) {
         setGameCode('pending');
+      }
+    } else if (gameArchive) {
+      const mostRecentGame = gameArchive[gameArchive.length - 1];
+      if (mostRecentGame.black.username === 'jallend1') {
+        setGameCode(mostRecentGame.black.result);
       } else {
-        if (gameArchive.length > 0) {
-          const mostRecentGame = gameArchive[gameArchive.length - 1];
-          if (mostRecentGame.black.username === 'jallend1') {
-            setGameCode(mostRecentGame.black.result);
-          } else {
-            setGameCode(mostRecentGame.white.result);
-          }
-        }
+        setGameCode(mostRecentGame.white.result);
       }
     }
   };
