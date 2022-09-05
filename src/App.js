@@ -1,17 +1,16 @@
 import { useEffect, useState } from 'react';
-
 import BackgroundVideo from './Components/BackgroundVideo';
 import Results from './Components/Results';
 
-function App() {
-  const resultStates = {
-    win: '🎉 Yes. 🎉',
-    loss: 'No!',
-    draw: 'It was a tie :(',
-    pending: 'Not Yet.',
-    loading: 'And the verdict is...'
-  };
+const resultStates = {
+  win: '🎉 Yes. 🎉',
+  loss: 'No!',
+  draw: 'It was a tie :(',
+  pending: 'Not Yet.',
+  loading: 'And the verdict is...'
+};
 
+function App() {
   const fetchURL = 'https://api.chess.com/pub/player/jallend1/games';
   const [gameResults, setGameResults] = useState('loading');
   const [displayedMessage, setDisplayedMessage] = useState(
@@ -52,7 +51,6 @@ function App() {
     )
       setGameResults('draw');
     else setGameResults(gameCode);
-    displayGameOutcome();
   };
 
   const displayGameOutcome = () => {
@@ -99,7 +97,8 @@ function App() {
   }, []);
 
   useEffect(checkActiveGameOpponent, [activeGames, gameArchive]);
-  useEffect(translateGameResult, [gameResults, resultStates]);
+  useEffect(translateGameResult, [gameCode]);
+  useEffect(displayGameOutcome, [gameResults]);
 
   return (
     <div className="App">
