@@ -92,11 +92,8 @@ function App() {
 
   return (
     <div className="App">
-      <BackgroundVideo
-        displayedMessage={displayedMessage}
-        gameResults={gameResults}
-      />
-      <Results displayedMessage={displayedMessage} gameResults={gameResults} />
+      <BackgroundVideo gameResults={gameResults} />
+      <Results displayedMessage={displayedMessage} />
     </div>
   );
 }
