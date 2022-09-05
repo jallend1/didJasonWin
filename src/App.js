@@ -4,50 +4,63 @@ import BackgroundVideo from './Components/BackgroundVideo';
 import Results from './Components/Results';
 
 function App() {
+  const resultStates = {
+    win: '🎉 Yes. 🎉',
+    loss: 'No!',
+    draw: 'It was a tie :(',
+    pending: 'Not Yet.',
+    loading: 'And the verdict is...'
+  };
+
   const fetchURL = 'https://api.chess.com/pub/player/jallend1/games';
   const [gameResults, setGameResults] = useState('loading');
   const [displayedMessage, setDisplayedMessage] = useState(
-    'And the verdict is...'
+    resultStates.loading
   );
   const [activeGames, setActiveGames] = useState(null);
   const [gameArchive, setGameArchive] = useState(null);
-  const [latestGame, setLatestGame] = useState(null);
-
-  // Potential States:
-  // Win
-  // Loss
-  // Draw
-  // Pending
-  // Loading
+  const [gameCode, setGameCode] = useState(null);
 
   const checkActiveGameOpponent = () => {
     // IF there are active games, verifies that one of them DOES indeed involve Papa
     if (activeGames && activeGames.length > 0) {
-      // If a Papa game is happening, reflect that in gameStatus. If not, do nothing and continue to archive assessment
+      // If a Papa game is happening, reflect that in gameCode. If not, reflect Chess Dot Com code
       if (
         activeGames[0].black ===
           'https://api.chess.com/pub/player/dchessmeister1' ||
         activeGames[0].white ===
           'https://api.chess.com/pub/player/dchessmeister1'
       ) {
-        setGameResults('pending');
+        setGameCode('pending');
+      } else {
+        if (gameArchive.length > 0) {
+          const mostRecentGame = gameArchive[gameArchive.length - 1];
+          if (mostRecentGame.black.username === 'jallend1') {
+            setGameCode(mostRecentGame.black.result);
+          } else {
+            setGameCode(mostRecentGame.white.result);
+          }
+        }
       }
     }
   };
 
   const translateGameResult = () => {
-    console.log(gameResults);
-    if (gameResults !== 'loading') {
-      setTimeout(() => {
-        if (gameResults === 'win') setDisplayedMessage('🎉 Yes. 🎉');
-        else if (gameResults === 'pending') setDisplayedMessage('Not Yet.');
-        else if (gameResults === 'agree' || gameResults === 'stalemate') {
-          setDisplayedMessage('It was a tie :(');
-        } else {
-          setDisplayedMessage('No!');
-        }
-      }, '4000');
-    }
+    if (
+      gameCode === 'agree' ||
+      gameCode === 'stalemate' ||
+      gameCode === 'repetition' ||
+      gameCode === 'insufficient'
+    )
+      setGameResults('draw');
+    else setGameResults(gameCode);
+    displayGameOutcome();
+  };
+
+  const displayGameOutcome = () => {
+    setTimeout(() => {
+      setDisplayedMessage(resultStates[gameResults]);
+    }, '4000');
   };
 
   // Fetches Games and Puts them in State
@@ -87,8 +100,8 @@ function App() {
     fetchArchiveGames();
   }, []);
 
-  useEffect(checkActiveGameOpponent, [activeGames]);
-  useEffect(translateGameResult, [gameResults]);
+  useEffect(checkActiveGameOpponent, [activeGames, gameArchive]);
+  useEffect(translateGameResult, [gameResults, resultStates]);
 
   return (
     <div className="App">
