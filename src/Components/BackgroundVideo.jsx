@@ -11,34 +11,23 @@ const BackgroundVideo = ({ gameResults, isReadyToLoadVideo }) => {
     loading: LoadingVideo
   };
 
-  return (
-    <div className="background-video" key={gameResults}>
-      <video autoPlay muted loop>
-        <source src={backgroundVideos[gameResults]} type="video/mp4" />
-      </video>
-    </div>
-  );
+  if (isReadyToLoadVideo) {
+    return (
+      <div className="background-video" key={gameResults}>
+        <video autoPlay muted loop>
+          <source src={backgroundVideos[gameResults]} type="video/mp4" />
+        </video>
+      </div>
+    );
+  } else {
+    return (
+      <div className="background-video">
+        <video autoPlay muted loop>
+          <source src={backgroundVideos.loading} type="video/mp4" />
+        </video>
+      </div>
+    );
+  }
 };
 
 export default BackgroundVideo;
-
-// {gameResults === 'win' && (
-//     <video autoPlay muted loop>
-//       <source src={VictoryVideo} type="video/mp4" />
-//     </video>
-//   )}
-//   {gameResults === 'loss' && (
-//     <video autoPlay muted loop>
-//       <source src={DefeatVideo} type="video/mp4" />
-//     </video>
-//   )}
-//   {gameResults === 'loading' && (
-//     <video autoPlay muted loop>
-//       <source src={LoadingVideo} type="video/mp4" />
-//     </video>
-//   )}
-//   {gameResults === 'pending' && (
-//     <video autoPlay muted loop>
-//       <source src={NotYetVideo} type="video/mp4" />
-//     </video>
-//   )}
