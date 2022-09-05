@@ -2,13 +2,15 @@ import VictoryVideo from '../images/win.mp4';
 import DefeatVideo from '../images/defeat.mp4';
 import LoadingVideo from '../images/loading.mp4';
 import NotYetVideo from '../images/notyet.mp4';
+import DrawVideo from '../images/draw.mp4';
 
 const BackgroundVideo = ({ gameResults, isReadyToLoadVideo }) => {
   const backgroundVideos = {
     win: VictoryVideo,
     lose: DefeatVideo,
     pending: NotYetVideo,
-    loading: LoadingVideo
+    loading: LoadingVideo,
+    draw: DrawVideo
   };
 
   if (isReadyToLoadVideo) {
