@@ -3,7 +3,7 @@ import DefeatVideo from '../images/defeat.mp4';
 import LoadingVideo from '../images/loading.mp4';
 import NotYetVideo from '../images/notyet.mp4';
 
-const BackgroundVideo = ({ gameResults }) => {
+const BackgroundVideo = ({ gameResults, isReadyToLoadVideo }) => {
   return (
     <div className="background-video">
       {gameResults === 'win' && (

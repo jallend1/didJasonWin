@@ -19,6 +19,7 @@ function App() {
   const [activeGames, setActiveGames] = useState(null);
   const [gameArchive, setGameArchive] = useState(null);
   const [gameCode, setGameCode] = useState(null);
+  const [isReadyToLoadVideo, setIsReadyToLoadVideo] = useState(false);
 
   const checkActiveGameOpponent = () => {
     // IF there are active games, verifies that one of them DOES indeed involve Papa
@@ -56,6 +57,7 @@ function App() {
   const displayGameOutcome = () => {
     setTimeout(() => {
       setDisplayedMessage(resultStates[gameResults]);
+      setIsReadyToLoadVideo(true);
     }, '4000');
   };
 
@@ -102,7 +104,10 @@ function App() {
 
   return (
     <div className="App">
-      <BackgroundVideo gameResults={gameResults} />
+      <BackgroundVideo
+        gameResults={gameResults}
+        isReadyToLoadVideo={isReadyToLoadVideo}
+      />
       <Results displayedMessage={displayedMessage} />
     </div>
   );
