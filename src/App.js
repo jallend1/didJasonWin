@@ -5,15 +5,38 @@ import DefeatVideo from './images/defeat.mp4';
 import LoadingVideo from './images/loading.mp4';
 import NotYetVideo from './images/notyet.mp4';
 
+// Potential States:
+// Win
+// Loss
+// Draw
+// Undetermined
+
 function App() {
   const [theAnswer, setTheAnswer] = useState('Researching the topic...');
+  const [yearAndMonthArray, setYearAndMonthArray] = useState(null);
+  const [activeGames, setActiveGames] = useState();
+  const [currentMonthArchive, setCurrentMonthArchive] = useState([]);
+  const [gameStatus, setGameStatus] = useState('');
   // const [latestGame, setLatestGame] = useState(null);
 
-  const formatCurrentMonth = (currentDate) => {
-    let currentMonth = currentDate.getMonth() + 1;
-    if (currentMonth < 10) currentMonth = '0' + currentMonth;
-    return currentMonth;
-  };
+  // Sets up date information for API endpoint
+  useEffect(() => {
+    const formatCurrentMonth = (currentDate) => {
+      // Ensures month is in two digit format endpoint requires
+      let currentMonth = currentDate.getMonth() + 1;
+      if (currentMonth < 10) currentMonth = '0' + currentMonth;
+      return currentMonth;
+    };
+
+    const getDateInfo = () => {
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+      const currentMonth = formatCurrentMonth(currentDate);
+      return [currentYear, currentMonth];
+    };
+
+    setYearAndMonthArray(getDateInfo());
+  }, []);
 
   const translateChessCode = (chessCode) => {
     setTimeout(() => {
@@ -61,67 +84,52 @@ function App() {
   //     });
   // };
 
-  const checkPapaOpponent = (game) => {
-    // Verifies that one of the active games DOES indeed involve Papa
-    return game.black === 'https://api.chess.com/pub/player/dchessmeister1' ||
-      game.white === 'https://api.chess.com/pub/player/dchessmeister1'
-      ? true
-      : false;
-  };
-
-  // const fetchChess = () => {
-  //   // Checks for active games
-  //   fetch(getFetchURL())
-  //     .then((res) => res.json())
-  //     .then(({ games }) => {
-  //       console.log(games);
-  //       // Temporarily check to see if games equal to 0 for debugging
-  //       if (games.length === 1) {
-  //         // If the game is against Papa, not yet
-  //         if (checkPapaOpponent(games[0])) setTheAnswer('Not Yet.');
-  //       } else {
-  //         retrieveLatestGame();
-  //       }
-  //     });
-  // };
-
   // const convertUnixTime = (chessTime) => {
   //   return new Date(chessTime * 1000).toString();
   // };
 
-  // useEffect(fetchChess, []);
+  useEffect(() => {
+    const checkPapaOpponent = (game) => {
+      // Verifies that one of the active games DOES indeed involve Papa
+      return game.black === 'https://api.chess.com/pub/player/dchessmeister1' ||
+        game.white === 'https://api.chess.com/pub/player/dchessmeister1'
+        ? true
+        : false;
+    };
+
+    if (activeGames) {
+    }
+  }, [activeGames]);
 
   useEffect(() => {
     const getFetchURL = (isRetrievingArchive = false) => {
+      // Returns fetch URL based on whether its returning the monthly archive or active games
       if (isRetrievingArchive) {
-        const [currentYear, currentMonth] = getDateInfo();
-        return `https://api.chess.com/pub/player/jallend1/games/${currentYear}/${currentMonth}`;
+        return `https://api.chess.com/pub/player/jallend1/games/${yearAndMonthArray[0]}/${yearAndMonthArray[1]}`;
       } else {
         return 'https://api.chess.com/pub/player/jallend1/games';
       }
     };
 
-    const getDateInfo = () => {
-      const currentDate = new Date();
-      const currentYear = currentDate.getFullYear();
-      const currentMonth = formatCurrentMonth(currentDate);
-      return [currentYear, currentMonth];
+    const fetchActiveGames = () => {
+      // Fetches any ongoing games in case it's unfinished for the day
+      if (yearAndMonthArray) {
+        fetch(getFetchURL())
+          .then((res) => res.json())
+          .then(({ games }) => {
+            setActiveGames([...games]);
+          });
+      }
     };
 
-    const fetchChess = () => {
-      // Checks for active games
-      fetch(getFetchURL())
-        .then((res) => res.json())
-        .then(({ games }) => {
-          console.log(games);
-          // Temporarily check to see if games equal to 0 for debugging
-          if (games.length === 1) {
-            // If the game is against Papa, not yet
-            if (checkPapaOpponent(games[0])) setTheAnswer('Not Yet.');
-          } else {
-            retrieveLatestGame();
-          }
-        });
+    const fetchMonthlyArchive = () => {
+      if (yearAndMonthArray) {
+        fetch(getFetchURL(true))
+          .then((res) => res.json())
+          .then(({ games }) => {
+            setActiveGames([...games]);
+          });
+      }
     };
 
     const retrieveLatestGame = () => {
@@ -143,9 +151,10 @@ function App() {
         });
     };
 
-    fetchChess();
-  }, []);
-
+    // fetchChess();
+    fetchActiveGames();
+    fetchMonthlyArchive();
+  }, [yearAndMonthArray]);
   return (
     <div className="App">
       {theAnswer === '🎉 Yes. 🎉' && (
